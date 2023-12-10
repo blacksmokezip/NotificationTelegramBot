@@ -1,14 +1,23 @@
 import asyncio
-
+import psycopg2
+import os
+import pytz
+from dotenv import load_dotenv, find_dotenv
 from aiogram import Router, F
 from aiogram.types import Message
-
 from datetime import datetime
 
-from core.hash import create_hash
+from core.tools.hash import create_hash
+from core.tools.database import (
+    add_a_notification,
+    select_user,
+    select_notification,
+    delete_notification
+)
 
 
 router = Router()
+load_dotenv(find_dotenv())
 
 
 @router.message(F.text.lower() == "добавить уведомление 🔔")
@@ -26,28 +35,54 @@ async def add_notification(message: Message):
 
 @router.message(F.text)
 async def add(
-        message: Message,
-        notifications: dict
+        message: Message
 ):
     date = message.text[-17:]
     name = message.text[:-18]
     hash = create_hash(name)
+    conn = psycopg2.connect(
+        os.environ.get(
+            "DATABASE_URL"
+        )
+    )
+    user = select_user(
+        conn,
+        int(message.from_user.id)
+    )
     try:
-        wait = datetime.strptime(
-            date,
-            "%d/%m/%y %H:%M:%S"
-        ) - datetime.now()
+        input_datetime = pytz.timezone(user[3]).localize(
+            datetime.strptime(date, "%d/%m/%y %H:%M:%S")
+        )
+        current_datetime = datetime.now(
+            pytz.timezone(user[3])
+        )
+        wait = input_datetime - current_datetime
         delay = int(wait.total_seconds())
-        notifications[hash] = [name, date]
+        add_a_notification(
+            conn,
+            int(message.from_user.id),
+            hash,
+            name,
+            date
+        )
         await message.answer(
             "Уведомление успешно добавлено!"
         )
         await asyncio.sleep(delay)
-        if notifications.get(hash) is None:
+        n = select_notification(
+            conn,
+            hash
+        )
+        if not n:
             return
         else:
-            await message.answer(notifications[hash][0])
-            notifications.pop(hash)
+            await message.answer(
+                f"{n[3]} {n[4]}"
+            )
+            delete_notification(
+                conn,
+                hash
+            )
     except ValueError:
         await message.answer(
             "Неверный формат уведомления!" +

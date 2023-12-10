@@ -1,36 +1,36 @@
 from aiogram import Router, F
-from aiogram.filters import Command
 from aiogram.types import Message
+import os
+import psycopg2
+from dotenv import load_dotenv, find_dotenv
 
-from core.keyboards.main_keyboard import get_kb
+from core.tools.database import (
+    select_notifications,
+    delete_notification
+)
 
 
 router = Router()
-
-
-@router.message(Command("start"))
-async def cmd_start(message: Message):
-    await message.answer(
-        f"Привет, {message.from_user.first_name}! " +
-        "Я буду напоминать тебе о важных событиях. " +
-        "Просто нажми кнопку 'добавить уведомление'",
-        reply_markup=get_kb()
-    )
+load_dotenv(find_dotenv())
+url = os.environ.get("DATABASE_URL")
 
 
 @router.message(F.text.lower() == "удалить уведомление ❌")
 async def stop_notification(
-        message: Message,
-        notifications: dict
+        message: Message
 ):
-    items = list(notifications.items())
+    conn = psycopg2.connect(url)
+    items = select_notifications(
+        conn,
+        int(message.from_user.id)
+    )
     if not items:
         await message.answer(
             "Список пуст"
         )
     else:
         reply = "\n".join(
-            [f"{i[0]}: {i[1][0]} {i[1][1]}" for i in items]
+            [f"{i[2]}: {i[3]} {i[4]}" for i in items]
         )
         await message.answer(
             reply
@@ -42,12 +42,12 @@ async def stop_notification(
 
 @router.message(lambda message: message.text.isdigit())
 async def stop(
-        message: Message,
-        notifications: dict
+        message: Message
 ):
     try:
+        conn = psycopg2.connect(url)
         id = int(message.text)
-        notifications.pop(id)
+        delete_notification(conn, id)
         await message.answer(
             "Уведомлние успешно удалено!"
         )
