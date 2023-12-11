@@ -41,7 +41,7 @@ def update_timezone(connection, id, timezone):
         connection.commit()
 
 
-def add_a_notification(connection, user_id, hash_, name, date):
+def add_a_notification(connection, *args):
     with connection.cursor() as cur:
         cur.execute(
             sql.SQL(
@@ -52,7 +52,7 @@ def add_a_notification(connection, user_id, hash_, name, date):
                 sql.Identifier("hash"),
                 sql.Identifier("name"),
                 sql.Identifier("date")
-            ), [user_id, hash_, name, date]
+            ), [args[0], args[1], args[2], args[3]]
         )
         connection.commit()
 
