@@ -2,6 +2,11 @@ import psycopg2
 from psycopg2 import sql
 
 
+query = sql.SQL(
+                "SELECT * FROM {} WHERE {}=%s"
+            )
+
+
 def get_connection(database):
     connection = psycopg2.connect(database)
     return connection
@@ -68,9 +73,7 @@ def delete_notification(connection, hash):
 def select_notification(connection, hash):
     with connection.cursor() as cur:
         cur.execute(
-            sql.SQL(
-                "SELECT * FROM {} WHERE {}=%s"
-            ).format(
+            query.format(
                 sql.Identifier("notifications"),
                 sql.Identifier("hash")
             ), [hash]
@@ -82,9 +85,7 @@ def select_notification(connection, hash):
 def select_notifications(connection, user_id):
     with connection.cursor() as cur:
         cur.execute(
-            sql.SQL(
-                "SELECT * FROM {} WHERE {}=%s"
-            ).format(
+            query.format(
                 sql.Identifier("notifications"),
                 sql.Identifier("user_id")
             ), [user_id]
@@ -96,9 +97,7 @@ def select_notifications(connection, user_id):
 def select_user(connection, user_id):
     with connection.cursor() as cur:
         cur.execute(
-            sql.SQL(
-                "SELECT * FROM {} WHERE {}=%s"
-            ).format(
+            query.format(
                 sql.Identifier("users"),
                 sql.Identifier("user_id")
             ), [user_id]
