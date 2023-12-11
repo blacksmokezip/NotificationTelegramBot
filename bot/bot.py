@@ -3,14 +3,14 @@ from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv, find_dotenv
 import os
 
-from core.handlers import (
+from bot.core.handlers import (
     start_bot,
     stop_notifications,
     show_notifications,
     add_notifications,
     set_timezone
 )
-from background import keep_alive
+from bot.background import keep_alive
 
 
 load_dotenv(find_dotenv())

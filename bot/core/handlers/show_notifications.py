@@ -4,7 +4,7 @@ import os
 import psycopg2
 from dotenv import load_dotenv, find_dotenv
 
-from core.tools.database import select
+from bot.core.tools.database import select
 
 
 router = Router()

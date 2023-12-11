@@ -7,8 +7,8 @@ from aiogram import Router, F
 from aiogram.types import Message
 from datetime import datetime
 
-from core.tools.hash import create_hash
-from core.tools.database import (
+from bot.core.tools.hash import create_hash
+from bot.core.tools.database import (
     add_a_notification,
     select,
     delete_notification
