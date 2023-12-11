@@ -41,7 +41,7 @@ def update_timezone(connection, id, timezone):
         connection.commit()
 
 
-def add_a_notification(connection, user_id, hash, name, date):
+def add_a_notification(connection, user_id, hash_, name, date):
     with connection.cursor() as cur:
         cur.execute(
             sql.SQL(
@@ -52,12 +52,12 @@ def add_a_notification(connection, user_id, hash, name, date):
                 sql.Identifier("hash"),
                 sql.Identifier("name"),
                 sql.Identifier("date")
-            ), [user_id, hash, name, date]
+            ), [user_id, hash_, name, date]
         )
         connection.commit()
 
 
-def delete_notification(connection, hash):
+def delete_notification(connection, hash_):
     with connection.cursor() as cur:
         cur.execute(
             sql.SQL(
@@ -65,7 +65,7 @@ def delete_notification(connection, hash):
             ).format(
                 sql.Identifier("notifications"),
                 sql.Identifier("hash")
-            ), [hash]
+            ), [hash_]
         )
         connection.commit()
 
