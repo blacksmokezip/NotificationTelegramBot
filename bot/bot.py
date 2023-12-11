@@ -10,7 +10,6 @@ from bot.core.handlers import (
     add_notifications,
     set_timezone
 )
-from bot.background import keep_alive
 
 
 load_dotenv(find_dotenv())
@@ -29,7 +28,6 @@ async def main():
     )
 
     await bot.delete_webhook(drop_pending_updates=True)
-    keep_alive()
     await dp.start_polling(bot)
 
 
