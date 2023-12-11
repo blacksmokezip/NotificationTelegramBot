@@ -5,7 +5,7 @@ import psycopg2
 from dotenv import load_dotenv, find_dotenv
 
 from core.tools.database import (
-    select_notifications,
+    select,
     delete_notification
 )
 
@@ -20,8 +20,10 @@ async def stop_notification(
         message: Message
 ):
     conn = psycopg2.connect(url)
-    items = select_notifications(
+    items = select(
         conn,
+        "notifications",
+        "user_id",
         int(message.from_user.id)
     )
     if not items:

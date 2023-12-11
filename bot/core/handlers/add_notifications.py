@@ -10,8 +10,7 @@ from datetime import datetime
 from core.tools.hash import create_hash
 from core.tools.database import (
     add_a_notification,
-    select_user,
-    select_notification,
+    select,
     delete_notification
 )
 
@@ -45,10 +44,12 @@ async def add(
             "DATABASE_URL"
         )
     )
-    user = select_user(
+    user = select(
         conn,
+        "users",
+        "user_id",
         int(message.from_user.id)
-    )
+    )[0]
     try:
         input_datetime = pytz.timezone(user[3]).localize(
             datetime.strptime(date, "%d/%m/%y %H:%M:%S")
@@ -69,15 +70,17 @@ async def add(
             "Уведомление успешно добавлено!"
         )
         await asyncio.sleep(delay)
-        n = select_notification(
+        n = select(
             conn,
+            "notifications",
+            "hash",
             hash
         )
         if not n:
             return
         else:
             await message.answer(
-                f"{n[3]} {n[4]}"
+                f"{n[0][3]} {n[0][4]}"
             )
             delete_notification(
                 conn,

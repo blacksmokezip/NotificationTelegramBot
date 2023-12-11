@@ -70,37 +70,13 @@ def delete_notification(connection, hash_):
         connection.commit()
 
 
-def select_notification(connection, hash):
+def select(connection, table, column, data):
     with connection.cursor() as cur:
         cur.execute(
             query.format(
-                sql.Identifier("notifications"),
-                sql.Identifier("hash")
-            ), [hash]
+                sql.Identifier(table),
+                sql.Identifier(column)
+            ), [data]
         )
-        notification = cur.fetchone()
-        return notification
-
-
-def select_notifications(connection, user_id):
-    with connection.cursor() as cur:
-        cur.execute(
-            query.format(
-                sql.Identifier("notifications"),
-                sql.Identifier("user_id")
-            ), [user_id]
-        )
-        notification = cur.fetchall()
-        return notification
-
-
-def select_user(connection, user_id):
-    with connection.cursor() as cur:
-        cur.execute(
-            query.format(
-                sql.Identifier("users"),
-                sql.Identifier("user_id")
-            ), [user_id]
-        )
-        user = cur.fetchone()
-        return user
+        result = cur.fetchall()
+        return result

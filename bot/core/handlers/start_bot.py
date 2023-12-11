@@ -8,7 +8,7 @@ from core.keyboards.main_keyboard import get_kb
 from core.tools.database import (
     get_connection,
     add_user,
-    select_user
+    select
 )
 
 
@@ -22,8 +22,10 @@ router = Router()
 @router.message(Command("start"))
 async def cmd_start(message: Message):
     conn = get_connection(DATABASE)
-    user = select_user(
+    user = select(
         conn,
+        "users",
+        "user_id",
         int(message.from_user.id)
     )
     if not user:
