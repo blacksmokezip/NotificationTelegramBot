@@ -9,4 +9,3 @@ coverage.xml
 .idea/
 .env
 setup.cfg
-bot/core/tools/test.py
