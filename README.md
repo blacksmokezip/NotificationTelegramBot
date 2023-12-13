@@ -27,5 +27,14 @@ Introducing my new Telegram bot designed to keep you on track with important eve
 
 ## Usage
 
+* ```bash
+  git clone https://github.com/blacksmokezip/NotificationTelegramBot.git
+  ```
+* Create .env file in the root directory
+  ```dotenv
+  TOKEN="{yout_telegram_bot_token}"
+  DATABASE_URL="{your://db/url}"
+  ```
+* Run bot.py
 * Press `/start` yo start using the bot. 
 * You can manage your notifications by pressing the corresponding buttons: `Add notification 🔔` to add a notification, `Delete notification ❌` to delete a notification, and `Show list 📋` to view a list of all notifications. You can also set the time zone by pressing button `Set timezone 🕞`.

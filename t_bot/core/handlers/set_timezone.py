@@ -4,9 +4,9 @@ import psycopg2
 import os
 from dotenv import load_dotenv, find_dotenv
 
-from bot.core.keyboards.timezone_keyboard import get_kb
-from bot.core.tools.constants import TIMEZONES
-from bot.core.tools.database import update_timezone
+from t_bot.core.keyboards.timezone_keyboard import get_kb
+from t_bot.core.tools.constants import TIMEZONES
+from t_bot.core.tools.database import update_timezone
 
 
 router = Router()

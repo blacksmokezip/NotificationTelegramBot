@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv, find_dotenv
 import os
 
-from bot.core.handlers import (
+from t_bot.core.handlers import (
     start_bot,
     stop_notifications,
     show_notifications,

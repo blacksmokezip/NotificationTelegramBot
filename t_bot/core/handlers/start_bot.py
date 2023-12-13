@@ -4,8 +4,8 @@ from aiogram.types import Message
 from dotenv import load_dotenv, find_dotenv
 import os
 
-from bot.core.keyboards.main_keyboard import get_kb
-from bot.core.tools.database import (
+from t_bot.core.keyboards.main_keyboard import get_kb
+from t_bot.core.tools.database import (
     get_connection,
     add_user,
     select

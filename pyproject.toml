@@ -15,10 +15,6 @@ psycopg2-binary = "^2.9.9"
 pytz = "^2023.3.post1"
 
 
-[tool.poetry.scripts]
-bot = "bot.bot:main"
-
-
 [tool.poetry.group.dev.dependencies]
 flake8 = "^6.1.0"
 
